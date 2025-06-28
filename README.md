@@ -62,4 +62,5 @@ Open the provided local URL in your browser to interact with the chatbot.
 - Built with [Streamlit](https://streamlit.io/), [LangChain](https://python.langchain.com/), [ChromaDB](https://www.trychroma.com/), and [Ollama](https://ollama.com/).
 
 ---
-Demo by VISHNU TEJA KUGARTHI. [Learn more](https://vitk.in/)
+Demo by VISHNU TEJA KUGARTHI. 
+[My Website](https://vitk.in/) [My LinkedIn](https://www.linkedin.com/in/vishnu-teja-kugarthi/)
