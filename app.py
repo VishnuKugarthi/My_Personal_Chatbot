@@ -10,7 +10,9 @@ from langchain.chains import RetrievalQA
 # IMPORTANT: Ensure 'my_resume.txt' exists in the same directory as this app.py file
 # and contains the plain text content of your resume.
 DOCUMENT_PATH = "my_resume.txt"
-LLM_MODEL = "phi4-mini:3.8b" # Make sure you've pulled this model with Ollama (e.g., ollama pull phi4-mini:3.8b)
+# Make sure you've pulled this model with Ollama (e.g., ollama pull phi4-mini:3.8b)
+# LLM_MODEL = "phi4-mini:3.8b" 
+LLM_MODEL = "llama3.2:latest" 
 
 # --- Streamlit UI ---
 st.set_page_config(page_title="Vishnu's personal assistant - LLM Demo on MacBook Air M2",
@@ -89,7 +91,7 @@ qa_chain = setup_rag_pipeline()
 # --- User Interaction ---
 st.markdown("---")
 # Text input for the user to type their question
-user_query = st.text_input("Ask a question about Vishnu:")
+user_query = st.text_input("Ask a question about Vishnu:", placeholder="e.g., What are Vishnu's skills, work experience and projects?", key="user_query")
 
 # Process the query when the user submits one
 if user_query:
@@ -106,4 +108,4 @@ if user_query:
             st.warning("If the model is not responding, try restarting Ollama or your Streamlit app.")
 
 st.markdown("---")
-st.caption("This demo showcases local LLM inference and RAG on Apple Silicon. [Learn more about LangChain](https://www.langchain.com/) and [Ollama](https://ollama.com/).")
+st.caption("This demo showcases local LLM inference and RAG on Apple Silicon. [Learn more about Vishnu](https://vitk.in/).")
