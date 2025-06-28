@@ -1,0 +1,72 @@
+VISHNU TEJA KUGARTHI
+Full-Stack Developer | India
++91 9700356514 | vishnutejaap@gmail.com | linkedin.com/in/vishnu-teja-kugarthi
+OBJECTIVE
+Passionate Full-Stack Developer with over 6.5 years of experience specializing in
+React.js and Node.js. Seeking to leverage my skills in creating intuitive, user-friendly web
+applications to drive growth and innovation in a forward-thinking tech company.
+EXPERIENCE
+Full-Stack Developer at IBM, Sep 2018 - Aug 2024
+Project 1: Revamping an Older Application Dec 2018 – Dec 2020
+●
+Led the revamp of a legacy application, achieving 90% positive user feedback.
+●
+Conducted user research and iteratively refined the design to enhance the user
+experience.
+●
+Focused on delivering user-centric solutions using iterative design strategies.
+Tech stack: React.js, Node.js, Carbon Design System
+Project 2: Micro Frontend Navigation Bar Jan 2021 – Dec 2021
+●
+Developed a global navigation bar that improved UI and deployment speed for
+a web application.
+●
+Enhanced user experience while solving operational challenges in an agile
+environment.
+Tech stack: React.js, Node.js, Material UI
+Project 3: Knowledge-Sharing Platform Jan 2022 – Feb 2023
+●
+Created a platform to facilitate knowledge sharing with internal details and
+learning tutorials.
+●
+Conducted stakeholder interviews and design reviews to ensure alignment with
+user needs.
+Tech stack: React.js, Node.js, Material UI
+Project 4: Dashboard Web Application Mar 2023 – Aug 2024
+●
+Developed a web application with customizable dashboards, significantly
+improving business efficiency.
+●
+Implemented an admin panel for dashboard customization, transitioning from
+static Excel files to dynamic, real-time analytics.
+Tech stack: React.js, Node.js, Next.js, Chakra UI, Tailwind CSS
+Full-Stack Developer at TCS, Aug 2024 - Present
+Project 1: Lloyds Banking Group Aug 2024 - Present
+●
+Developed user interfaces and APIs for Lloyds Bank, focusing on seamless user
+experiences and secure data handling tailored to the banking sector.
+Tech stack: React.js, Node.js
+SKILLS AND TOOLS
+Front-End Technologies: React.js, Redux, React Hooks, HTML, CSS, JavaScript, JSON
+Back-End Technologies: Node.js
+Testing Tools: React Testing Library, Jest, Mock Service Worker, Cypress, SonarQube
+UI Frameworks and Libraries: Next.js, Carbon Design, Material Design, Tailwind CSS,
+Chakra UI, Bootstrap
+DevOps and Cloud: CI/CD, Db2, IBM Cloud
+Development Tools: Visual Studio Code, Jira, Trello, Slack, Notion
+Design and Collaboration Tools: Figma, FigJam, MS Office, Google Workspace
+CERTIFICATIONS
+●
+●
+●
+IBM Carbon Design System Developer Essentials – React
+React JS - Mastering Redux
+Testing React with Jest and Testing Library
+View my Linkedin profile (linkedin.com/in/vishnu-teja-kugarthi) to see my other
+certificates.
+EDUCATION
+Bachelor of Technology (B.Tech) in Computer Science and Engineering
+Completed in 2017 with a percentage of 70.3% at a JNTUA-affiliated college in Andhra
+Pradesh, India.
+LANGUAGES
+English, Telugu and Hindi
