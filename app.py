@@ -16,7 +16,7 @@ LLM_MODEL = "phi4-mini:3.8b" # Make sure you've pulled this model with Ollama (e
 st.set_page_config(page_title="Vishnu's personal assistant - LLM Demo on MacBook Air M2",
                    page_icon=":robot_face:",
                    layout="wide")
-st.title("Hi this is Vishnu's personal assistant powered by Local LLMs")
+st.title("Hi, I'm Vishnu's personal assistant powered by Local LLMs")
 st.subheader("You can ask questions about my work experience, skills and projects that I have worked on.")
 st.write(f"Powered by {LLM_MODEL} via Ollama")
 st.markdown("---")
@@ -89,7 +89,7 @@ qa_chain = setup_rag_pipeline()
 # --- User Interaction ---
 st.markdown("---")
 # Text input for the user to type their question
-user_query = st.text_input("Ask a question about the document:")
+user_query = st.text_input("Ask a question about Vishnu:")
 
 # Process the query when the user submits one
 if user_query:
