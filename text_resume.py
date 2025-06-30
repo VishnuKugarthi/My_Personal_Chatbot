@@ -12,7 +12,8 @@ from langchain.chains import RetrievalQA
 DOCUMENT_PATH = "my_resume.txt"
 # Make sure you've pulled this model with Ollama (e.g., ollama pull phi4-mini:3.8b)
 # LLM_MODEL = "phi4-mini:3.8b" 
-LLM_MODEL = "llama3.2:latest" 
+# LLM_MODEL = "llama3.2:latest" 
+LLM_MODEL = "qwen3:0.6b"
 
 # --- Streamlit UI ---
 st.set_page_config(page_title="Vishnu's personal assistant - LLM Demo on MacBook Air M2",
@@ -52,23 +53,35 @@ def setup_rag_pipeline():
         # for models with limited context windows, especially on systems with less RAM.
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=400, chunk_overlap=40)
         texts = text_splitter.split_documents(documents)
+        
+        print(f"text_splitter = {text_splitter} and texts = {texts}.")
+        
         st.write(f"Split document into {len(texts)} chunks.")
 
         # 3. Create embeddings for the text chunks using Ollama
         # OllamaEmbeddings uses the specified LLM to convert text chunks into numerical vectors.
         # These vectors are used to find relevant chunks when a query is made.
         embeddings = OllamaEmbeddings(model=LLM_MODEL)
+
+        print(f"embeddings = {embeddings}")
+
         st.write("Ollama Embeddings initialized.")
 
         # 4. Create a vector store (ChromaDB) from the chunks and their embeddings
         # ChromaDB stores these text chunks and their embeddings, enabling efficient
         # similarity search later. It runs locally in memory for this demo.
         vectorstore = Chroma.from_documents(texts, embeddings)
+
+        print(f"vectorstore = {vectorstore}")
+
         st.write("Vector store created with ChromaDB.")
 
         # 5. Create a retriever to fetch relevant documents from the vector store
         # The retriever fetches the most similar text chunks based on a user's query.
         retriever = vectorstore.as_retriever()
+
+        print(f"retriever = {retriever}")
+
         st.write("Retriever configured.")
 
         # 6. Initialize the Large Language Model (LLM) via Ollama
