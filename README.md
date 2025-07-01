@@ -63,4 +63,4 @@ Open the provided local URL in your browser to interact with the chatbot.
 
 ---
 Demo by VISHNU TEJA KUGARTHI. 
-[My Website](https://vitk.in/) [My LinkedIn](https://www.linkedin.com/in/vishnu-teja-kugarthi/)
+[My Website](https://vitk.in/)
