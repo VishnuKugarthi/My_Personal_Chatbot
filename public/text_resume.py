@@ -11,7 +11,7 @@ from langchain.chains import RetrievalQA
 # and contains the plain text content of your resume.
 DOCUMENT_PATH = "my_resume.txt"
 # Make sure you've pulled this model with Ollama (e.g., ollama pull phi4-mini:3.8b)
-LLM_MODEL = "llama3.2:1b" 
+LLM_MODEL = "llama3.2:latest"
 
 # --- Streamlit UI ---
 st.set_page_config(page_title="Personal Assistant - LLM Demo on Apple Silicon",
