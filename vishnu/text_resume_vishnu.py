@@ -5,37 +5,45 @@ from langchain_ollama import OllamaEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain_ollama import OllamaLLM
 from langchain.chains import RetrievalQA
+from langchain.prompts import PromptTemplate # New import for better prompt engineering
 
 # --- Configuration ---
 # IMPORTANT: Ensure 'my_resume.txt' exists in the same directory as this app.py file
 # and contains the plain text content of your resume.
 DOCUMENT_PATH = "my_resume.txt"
-# Make sure you've pulled this model with Ollama (e.g., ollama pull llama3.2:latest)
-# LLM_MODEL = "llama3.2:latest" 
-# LLM_MODEL = "qwen3:0.6b"
-LLM_MODEL = "llama3.2:latest"  
+
+# Model for answering questions (LLM for generation)
+# Consider models like "llama3:8b" (larger, better quality), "mistral:7b" (good balance),
+# or "tinyllama:latest" / "qwen:0.5b-chat" for very small footprint.
+# Let's try a slightly larger, more capable model for better answers, if your M2 can handle it.
+# If "llama3.2:1b" is still struggling, consider "tinyllama:latest" or "qwen:0.5b-chat".
+LLM_MODEL = "llama3.2:3b" # Changed to 3B for potentially better answers
 
 # Dedicated model for generating embeddings (MUST support embeddings)
-# nomic-embed-text is highly recommended for this purpose
+# nomic-embed-text is highly recommended for this purpose and is very efficient.
 EMBEDDING_MODEL = "nomic-embed-text"
 
-# --- Streamlit UI ---
-st.set_page_config(page_title="Vishnu's personal assistant - LLM Demo on MacBook Air M2",
+# --- Streamlit UI Setup ---
+st.set_page_config(page_title="Vishnu's Personal Assistant - LLM Demo",
                    page_icon=":robot_face:",
-                   layout="wide")
-st.title("Hi, I'm Vishnu's personal assistant powered by Local LLMs")
-st.subheader("You can ask questions about my work experience, skills and projects that I have worked on.")
-st.write(f"Powered by {LLM_MODEL} via Ollama")
-st.markdown("---")
-st.write("This application demonstrates Retrieval-Augmented Generation (RAG) by answering questions based solely on the loaded resume. Ask about my experience, skills, or projects!")
+                   layout="centered",
+                   initial_sidebar_state="collapsed")
 
-# Display document content (optional, but good for demo and debugging)
+st.title("Hi, I'm Vishnu's Personal Assistant 🤖")
+st.subheader("Powered by Local LLMs via Ollama")
+st.write("Ask me anything about Vishnu's **work experience, skills, or projects**.")
+st.write(f"Powered by **{LLM_MODEL}** (for answers) and **{EMBEDDING_MODEL}** (for understanding)")
+st.markdown("---")
+
+# Display document content in an expander for transparency
 try:
     with open(DOCUMENT_PATH, 'r') as f:
-        st.expander("View Loaded Document Content").code(f.read())
+        st.expander("View Loaded Resume Content").code(f.read())
 except FileNotFoundError:
-    st.error(f"Error: '{DOCUMENT_PATH}' not found. Please create this file in the same directory as app.py and add your resume text.")
-    st.stop() # Stop the app if the document is missing to prevent further errors
+    st.error(f"Error: '{DOCUMENT_PATH}' not found. Please create this file in the same directory as app.py and add Vishnu's resume text.")
+    st.stop()
+
+st.markdown("---")
 
 # --- RAG Pipeline Setup (runs once when app starts) ---
 @st.cache_resource
@@ -43,78 +51,99 @@ def setup_rag_pipeline():
     """
     Sets up the RAG pipeline components: document loading, splitting,
     embedding, vector store creation, and LLM initialization.
-    This function is cached to run only once.
+    This function is cached to run only once to optimize performance.
     """
     with st.spinner(f"Setting up LLM ({LLM_MODEL}) and RAG pipeline with Embeddings ({EMBEDDING_MODEL})..."):
         # 1. Load document from the specified path
         loader = TextLoader(DOCUMENT_PATH)
         documents = loader.load()
-        st.write(f"Loaded {len(documents)} document(s).")
 
         # 2. Split documents into smaller, manageable chunks
-        # Chunk size and overlap are crucial for effective retrieval and LLM context.
-        # Smaller chunks (e.g., 400 characters) are good for detailed questions and
-        # for models with limited context windows, especially on systems with less RAM.
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=400, chunk_overlap=40)
+        # Increased chunk_size slightly for more context, adjusted overlap accordingly
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
         texts = text_splitter.split_documents(documents)
-        
-        st.write(f"Split document into {len(texts)} chunks.")
 
-        # 3. Create embeddings for the text chunks using Ollama
-        # OllamaEmbeddings uses the specified LLM to convert text chunks into numerical vectors.
-        # These vectors are used to find relevant chunks when a query is made.
-        embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL) 
-
-        st.write(f"{EMBEDDING_MODEL} Embeddings initialized.")
+        # 3. Create embeddings for the text chunks using the DEDICATED Embedding model
+        embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL)
 
         # 4. Create a vector store (ChromaDB) from the chunks and their embeddings
-        # ChromaDB stores these text chunks and their embeddings, enabling efficient
-        # similarity search later. It runs locally in memory for this demo.
         vectorstore = Chroma.from_documents(texts, embeddings)
 
-        st.write("Vector store created with ChromaDB.")
-
         # 5. Create a retriever to fetch relevant documents from the vector store
-        # The retriever fetches the most similar text chunks based on a user's query.
-        retriever = vectorstore.as_retriever()
+        retriever = vectorstore.as_retriever(search_kwargs={"k": 3}) # Retrieve top 3 relevant chunks
 
-        st.write("Retriever configured.")
-
-        # 6. Initialize the Large Language Model (LLM) via Ollama
-        # This is the model that will generate answers based on the retrieved context.
+        # 6. Initialize the Large Language Model (LLM) for text generation
         llm = OllamaLLM(model=LLM_MODEL)
-        st.write(f"LLM '{LLM_MODEL}' initialized.")
 
-        # 7. Create the RetrievalQA chain
-        # This chain connects the retriever and the LLM. When a query comes in:
-        #   a) Retriever finds relevant text chunks.
-        #   b) These chunks are "stuffed" (concatenated) into the LLM's prompt.
-        #   c) The LLM generates an answer based on the query and the provided context.
-        qa_chain = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
-        st.success("RAG pipeline setup complete!")
+        # 7. Create a custom prompt template for the RAG chain
+        # This guides the LLM to answer based *only* on the provided context.
+        template = """You are Vishnu's personal assistant. Use the following context to answer questions about Vishnu.
+        If you don't know the answer based on the provided context, politely state that the information is not available in the resume.
+        Do not make up answers.
+
+        Context: {context}
+
+        Question: {question}
+        Answer:"""
+        QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
+
+        # 8. Create RetrievalQA chain with the custom prompt
+        qa_chain = RetrievalQA.from_chain_type(
+            llm=llm,
+            chain_type="stuff",
+            retriever=retriever,
+            return_source_documents=False, # Set to True if you want to see which chunks were used
+            chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
+        )
+        st.success("RAG pipeline setup complete! Ready to chat.")
         return qa_chain
 
 # Setup the RAG pipeline when the app starts or is rerun
 qa_chain = setup_rag_pipeline()
 
-# --- User Interaction ---
-st.markdown("---")
-# Text input for the user to type their question
-user_query = st.text_input("Ask a question about Vishnu:", placeholder="e.g., What are Vishnu's skills, work experience and projects?", key="user_query")
+# --- Chat History Management ---
+# Initialize chat history in Streamlit's session state
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+    # Add an initial greeting from the assistant
+    st.session_state.messages.append({"role": "assistant", "content": "Hello! I'm Vishnu's personal assistant. How can I help you today?"})
 
-# Process the query when the user submits one
-if user_query:
-    with st.spinner("Generating answer..."):
-        try:
-            # Invoke the QA chain with the user's query
-            response = qa_chain.invoke({"query": user_query})
-            st.write("**Answer:**")
-            # Display the answer from the LLM
-            st.info(response["result"])
-        except Exception as e:
-            # Error handling for issues with Ollama or model loading
-            st.error(f"An error occurred: {e}. Make sure Ollama is running and the model '{LLM_MODEL}' is pulled.")
-            st.warning("If the model is not responding, try restarting Ollama or your Streamlit app.")
+# Display chat messages from history on app rerun
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
+# --- User Input and Response Generation ---
+# Accept user input
+# Added a more inviting placeholder
+if prompt := st.chat_input("Ask me about Vishnu's experience, skills, or projects...", key="chat_input"):
+    # Add user message to chat history
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    # Display user message in chat message container
+    with st.chat_message("user"):
+        st.markdown(prompt)
+
+    # Get assistant response
+    with st.chat_message("assistant"):
+        with st.spinner("Thinking..."):
+            try:
+                # Invoke the QA chain with the user's query
+                response = qa_chain.invoke({"query": prompt})
+                assistant_response = response["result"]
+                st.markdown(assistant_response)
+            except Exception as e:
+                # Improved error message for the user
+                assistant_response = (
+                    f"Oops! An error occurred: `{e}`. "
+                    "This might be due to Ollama not running, or the models "
+                    f"('{LLM_MODEL}' and '{EMBEDDING_MODEL}') not being pulled correctly. "
+                    "Please check your terminal for more details and ensure Ollama is active."
+                )
+                st.error(assistant_response)
+                st.warning("If the model is not responding, try restarting Ollama or your Streamlit app.")
+
+    # Add assistant response to chat history
+    st.session_state.messages.append({"role": "assistant", "content": assistant_response})
 
 st.markdown("---")
 st.caption("This demo showcases local LLM inference and RAG on Apple Silicon. [Learn more about Vishnu](https://vitk.in/).")

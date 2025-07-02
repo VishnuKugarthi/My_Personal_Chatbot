@@ -10,7 +10,7 @@ from langchain.chains import RetrievalQA
 # IMPORTANT: Ensure 'my_resume.txt' exists in the same directory as this file
 # and contains the plain text content of your resume.
 DOCUMENT_PATH = "my_resume.txt"
-# Make sure you've pulled this model with Ollama (e.g., ollama pull phi4-mini:3.8b)
+# Make sure you've pulled this model with Ollama (e.g., ollama pull llama3.2:latest)
 LLM_MODEL = "llama3.2:latest"
 
 # --- Streamlit UI ---
