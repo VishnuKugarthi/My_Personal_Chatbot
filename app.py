@@ -5,7 +5,7 @@ from langchain_ollama import OllamaEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain_ollama import OllamaLLM
 from langchain.chains import RetrievalQA
-from langchain.prompts import PromptTemplate # New import for better prompt engineering
+from langchain.prompts import PromptTemplate
 
 # --- Configuration ---
 # IMPORTANT: Ensure 'my_resume.txt' exists in the same directory as this app.py file
@@ -13,11 +13,7 @@ from langchain.prompts import PromptTemplate # New import for better prompt engi
 DOCUMENT_PATH = "my_resume.txt"
 
 # Model for answering questions (LLM for generation)
-# Consider models like "llama3:8b" (larger, better quality), "mistral:7b" (good balance),
-# or "tinyllama:latest" / "qwen:0.5b-chat" for very small footprint.
-# Let's try a slightly larger, more capable model for better answers, if your M2 can handle it.
-# If "llama3.2:1b" is still struggling, consider "tinyllama:latest" or "qwen:0.5b-chat".
-LLM_MODEL = "llama3.2:3b" # Changed to 3B for potentially better answers
+LLM_MODEL = "llama3.2:3b" 
 
 # Dedicated model for generating embeddings (MUST support embeddings)
 # nomic-embed-text is highly recommended for this purpose and is very efficient.
