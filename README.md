@@ -50,6 +50,18 @@ streamlit run app.py
 
 Open the provided local URL in your browser to interact with the chatbot.
 
+
+## Demo
+
+https://github.com/VishnuKugarthi/My_Personal_Chatbot/blob/main/RAG%20Local%20LLM%20Demo.m4v
+
+<details>
+<summary>Click to view embedded video (GitHub may not preview .m4v inline, but you can download or open in a new tab)</summary>
+
+<video src="https://github.com/VishnuKugarthi/My_Personal_Chatbot/raw/main/RAG%20Local%20LLM%20Demo.m4v" controls width="600"></video>
+
+</details>
+
 ## File Structure
 - `app.py` — Main Streamlit application
 - `my_resume.txt` — Your resume (plain text)
