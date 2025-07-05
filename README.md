@@ -66,7 +66,6 @@ https://github.com/VishnuKugarthi/My_Personal_Chatbot/blob/main/RAG%20Local%20LL
 - `app.py` — Main Streamlit application
 - `my_resume.txt` — Your resume (plain text)
 - `requirements.txt` — Python dependencies
-- `terminal-commands.txt` — (Optional) Useful terminal commands
 
 ## Troubleshooting
 - **Ollama not running?** Start it with `ollama serve`.
