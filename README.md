@@ -25,16 +25,23 @@ This project is a Streamlit web application that demonstrates Retrieval-Augmente
 - **Ollama** installed and running locally ([get it here](https://ollama.com/))
 - **Apple Silicon Mac** (optimized for M1/M2/M3, but works on Intel Macs too)
 
-### 2. Install Python Dependencies
+### 2. (Recommended) Create a Virtual Environment
+Create a dedicated environment for your project to manage dependencies cleanly:
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+### 3. Install Python Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Prepare Your Resume
+### 4. Prepare Your Resume
 - Create a file named `my_resume.txt` in the project directory.
 - Paste your resume content (plain text) into this file.
 
-### 4. Pull the LLM and Embedding Models with Ollama
+### 5. Pull the LLM and Embedding Models with Ollama
 - By default, the app uses `llama3.2:3b` for answers and `nomic-embed-text` for embeddings. You can change these in `app.py`.
 - To pull the models:
   ```bash
@@ -43,7 +50,7 @@ pip install -r requirements.txt
   # or use any other supported models
   ```
 
-### 5. Run the App
+### 6. Run the App
 ```bash
 streamlit run app.py
 ```
